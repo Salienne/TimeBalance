@@ -126,6 +126,7 @@ function isPublicHoliday(date) {
   function getWorkHoursForCurrentMonth() {
     console.log("getting work hours for current month")
     var currentDate = new Date()
+    var currentDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())
     var workDaysPassed = getWeekdaysInMonthTillDay(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())
     var reportedDays = Array.from(
         document.getElementsByClassName("uu5-bricks-text uu5-common-text uu-specialistwtm-worker-monthly-detail-grid-panel-day-date uu5-bricks-text-nesting-level-small-box")
@@ -141,12 +142,21 @@ function isPublicHoliday(date) {
                 dateArr[0]
             )
         })
+    		.map(d => d.getTime())
         .sort()
-    var lastDate = reportedDays[0]
-    if (lastDate.getTime() === currentDate.getTime() || !isWeekday(currentDate)) {
-    } else {
+    var lastDate = reportedDays[reportedDays.length - 1]
+    console.log("unmodified workDays: " + workDaysPassed)
+    console.log("reported days: " + reportedDays)
+    console.log("lastDate: " + lastDate)
+    console.log("currentDate: " + currentDay)
+    console.log("currentDay === lastDate: " + (currentDay.getTime() === lastDate))
+    if (
+      !(lastDate === currentDay.getTime()) && isWeekday(currentDay)
+    ) {
+      	console.log("modifiyng workDays")
         workDaysPassed = workDaysPassed - 1
     }
+    console.log("final workDays: " + workDaysPassed)
     return workDaysPassed
   }
   
